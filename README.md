@@ -1,4 +1,4 @@
-# 💰 Amortization APP
+# 💰 Amortization APP - CubePath
 
 Una aplicación web moderna e interactiva para simular, analizar y optimizar estrategias de amortización de préstamos. Calcula tablas de amortización detalladas, visualiza gráficos comparativos y explora diferentes estrategias de pago para tomar decisiones financieras inteligentes.
 
@@ -12,6 +12,29 @@ Una aplicación web moderna e interactiva para simular, analizar y optimizar est
 - **Estrategias de pago** comparando diferentes métodos y sus impactos
 - **Pagos adicionales** personalizados para acelerar la liquidación del préstamo
 - **Análisis de inversión** considerando el ROI de mantener capital invertido vs. pagar el préstamo
+
+## ☁️ Despliegue en CubePath
+
+Este proyecto está desplegado en **[CubePath](https://cubepath.com/)**, un servicio de VPS en la nube.
+
+### ¿Cómo se desplegó?
+
+1. **Servidor VPS** — Se creó un servidor en CubePath con los $15 de crédito gratuito
+2. **Dokploy** — Se instaló Dokploy como plataforma de gestión de despliegues dentro del VPS
+3. **Conexión a GitHub** — Se conectó el repositorio de GitHub directamente a Dokploy para despliegue automático
+4. **Build automatizado** — Se configuró **Railpack** como build type, que detectó automáticamente el proyecto Vite + React + Bun y ejecutó el build
+5. **Dominio** — Se configuró un dominio público a través de Dokploy con Traefik como reverse proxy
+
+### Stack de despliegue
+
+| Componente | Tecnología |
+|---|---|
+| **Hosting** | CubePath VPS |
+| **Orquestador** | Dokploy |
+| **Build** | Railpack (detección automática) |
+| **Reverse Proxy** | Traefik |
+| **Runtime** | Bun + Vite |
+
 
 ## 🚀 Características principales
 
