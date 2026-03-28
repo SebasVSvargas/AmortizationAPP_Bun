@@ -4,9 +4,10 @@ const UIContext = createContext(null);
 
 export const UIProvider = ({ children }) => {
   const [activeTab, setActiveTab] = useState('summary');
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <UIContext.Provider value={{ activeTab, setActiveTab }}>
+    <UIContext.Provider value={{ activeTab, setActiveTab, drawerOpen, setDrawerOpen }}>
       {children}
     </UIContext.Provider>
   );
