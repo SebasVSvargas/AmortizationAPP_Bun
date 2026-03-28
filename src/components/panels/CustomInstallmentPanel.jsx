@@ -33,7 +33,7 @@ const CustomInstallmentPanel = () => {
             onChange={setCustomInstallmentValue}
             showThousands
             className="bg-amber-50 border-amber-200 font-bold text-amber-900 focus:ring-amber-400"
-            placeholder="Ej: 800.000"
+            placeholder="Ej: 1.500.000"
           />
           <p className="text-[10px] text-amber-600 mt-1">Mínimo sugerido: {formatCurrency(baseline.monthlyPmt)}</p>
         </div>
