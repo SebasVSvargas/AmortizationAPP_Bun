@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useMemo } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal } from "lucide-react";
 import { useUIContext } from "../lib/context/UIContext";
@@ -70,8 +70,44 @@ const AppContent = () => {
 
 function HomeContent() {
   const searchParams = useSearchParams();
+  const [scenarioData, setScenarioData] = useState(null);
+  const [loadingScenario, setLoadingScenario] = useState(false);
+
+  const scenarioId = searchParams.get("scenarioId");
+
+  useEffect(() => {
+    if (!scenarioId) {
+      setScenarioData(null);
+      return;
+    }
+
+    setLoadingScenario(true);
+    fetch(`/api/scenarios/${scenarioId}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("No encontrado");
+        return res.json();
+      })
+      .then((data) => {
+        setScenarioData({
+          loanAmount: data.loanAmount,
+          interestRate: data.interestRate,
+          termMonths: data.termMonths,
+          method: data.method,
+          customInstallment: data.customInstallment || 0,
+          extraPayments: data.extraPayments || [],
+        });
+      })
+      .catch(() => {
+        setScenarioData(null);
+      })
+      .finally(() => {
+        setLoadingScenario(false);
+      });
+  }, [scenarioId]);
 
   const initialData = useMemo(() => {
+    if (scenarioData) return scenarioData;
+
     const amount = searchParams.get("amount");
     const rate = searchParams.get("rate");
     const term = searchParams.get("term");
@@ -87,7 +123,15 @@ function HomeContent() {
     }
 
     return null;
-  }, [searchParams]);
+  }, [scenarioData, searchParams]);
+
+  if (loadingScenario) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
 
   return (
     <UIProvider>

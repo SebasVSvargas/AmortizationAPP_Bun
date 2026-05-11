@@ -32,7 +32,7 @@ const SaveModal = ({ isOpen, onClose, loanData }) => {
           interestRate: loanData.interestRate,
           termMonths: loanData.termMonths,
           method: loanData.method,
-          customInstallment: loanData.customInstallmentValue || null,
+          customInstallment: loanData.useCustomInstallment ? loanData.customInstallmentValue : 0,
           extraPayments: loanData.extraPayments || [],
         }),
       });

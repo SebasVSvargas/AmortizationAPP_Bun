@@ -23,7 +23,7 @@ export const LoanProvider = ({ children, initialData = null }) => {
   const [investmentROI, setInvestmentROI] = useState(LOAN_DEFAULTS.INVESTMENT_ROI);
 
   const [useCustomInstallment, setUseCustomInstallment] = useState(
-    !!initialData?.customInstallment
+    (initialData?.customInstallment || 0) > 0
   );
   const [customInstallmentValue, setCustomInstallmentValue] = useState(
     initialData?.customInstallment || 0

@@ -60,14 +60,7 @@ export default function ScenarioPage() {
   };
 
   const handleSimulate = () => {
-    const queryParams = new URLSearchParams({
-      amount: scenario.loanAmount,
-      rate: scenario.interestRate,
-      term: scenario.termMonths,
-      method: scenario.method,
-    });
-
-    router.push(`/?${queryParams.toString()}`);
+    router.push(`/?scenarioId=${params.id}`);
   };
 
   if (loading) {

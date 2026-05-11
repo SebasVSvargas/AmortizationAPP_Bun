@@ -14,13 +14,7 @@ export default function ScenarioCard({ scenario, onDelete, onUpdate }) {
   const router = useRouter();
 
   const handleClick = () => {
-    const params = new URLSearchParams({
-      amount: scenario.loanAmount,
-      rate: scenario.interestRate,
-      term: scenario.termMonths,
-      method: scenario.method,
-    });
-    router.push(`/?${params.toString()}`);
+    router.push(`/?scenarioId=${scenario.id}`);
   };
 
   const handleEditName = async (e) => {
