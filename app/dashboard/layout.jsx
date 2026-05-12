@@ -36,7 +36,7 @@ export default function DashboardLayout({ children }) {
             <Link href="/" className="flex items-center gap-2">
               <Calculator className="w-6 h-6 text-indigo-600" />
               <span className="text-xl font-black text-indigo-900">
-                Simulador Crédito
+                Amortízate
               </span>
             </Link>
 

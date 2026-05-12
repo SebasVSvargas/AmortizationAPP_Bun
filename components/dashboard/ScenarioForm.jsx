@@ -60,7 +60,7 @@ export default function ScenarioForm({ initialData = null, isEditing = false }) 
 
       router.push(`/dashboard/scenario/${data.id}`);
       router.refresh();
-    } catch (err) {
+    } catch {
       setError("Error al guardar el escenario");
     } finally {
       setLoading(false);

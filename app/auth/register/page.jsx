@@ -44,7 +44,7 @@ export default function RegisterPage() {
       } else {
         router.push("/dashboard");
       }
-    } catch (err) {
+    } catch {
       setError("Error al registrarse");
     } finally {
       setLoading(false);
@@ -55,7 +55,7 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       await signIn("google", { callbackUrl: "/dashboard" });
-    } catch (err) {
+    } catch {
       setError("Error al iniciar sesión con Google");
       setLoading(false);
     }
@@ -68,7 +68,7 @@ export default function RegisterPage() {
           <div className="flex items-center justify-center gap-2 mb-4">
             <Calculator className="w-10 h-10 text-indigo-600" />
             <h1 className="text-3xl font-black text-indigo-900">
-              Simulador Crédito
+              Amortízate
             </h1>
           </div>
           <p className="text-slate-500">Crea tu cuenta para guardar escenarios</p>

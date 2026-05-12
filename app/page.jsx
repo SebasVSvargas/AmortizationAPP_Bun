@@ -20,7 +20,7 @@ const AppContent = () => {
 
   useEffect(() => {
     setDrawerOpen(false);
-  }, [activeTab]);
+  }, [activeTab, setDrawerOpen]);
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-900">

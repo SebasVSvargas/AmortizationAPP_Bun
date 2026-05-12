@@ -2,7 +2,7 @@ import "./globals.css";
 import AuthProvider from "../components/auth/AuthProvider";
 
 export const metadata = {
-  title: "Simulador Crédito - Amortización",
+  title: "Amortízate",
   description: "Simulación y cálculo de amortización de créditos",
 };
 

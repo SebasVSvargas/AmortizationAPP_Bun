@@ -30,7 +30,7 @@ export default function LoginPage() {
       } else {
         router.push("/dashboard");
       }
-    } catch (err) {
+    } catch {
       setError("Error al iniciar sesión");
     } finally {
       setLoading(false);
@@ -41,7 +41,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await signIn("google", { callbackUrl: "/dashboard" });
-    } catch (err) {
+    } catch {
       setError("Error al iniciar sesión con Google");
       setLoading(false);
     }
@@ -54,7 +54,7 @@ export default function LoginPage() {
           <div className="flex items-center justify-center gap-2 mb-4">
             <Calculator className="w-10 h-10 text-indigo-600" />
             <h1 className="text-3xl font-black text-indigo-900">
-              Simulador Crédito
+              Amortízate
             </h1>
           </div>
           <p className="text-slate-500">Inicia sesión para guardar tus escenarios</p>

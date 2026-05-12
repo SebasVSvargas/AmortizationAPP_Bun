@@ -44,7 +44,7 @@ const SaveModal = ({ isOpen, onClose, loanData }) => {
         const data = await res.json();
         setError(data.error || 'Error al guardar');
       }
-    } catch (err) {
+    } catch {
       setError('Error al guardar el escenario');
     } finally {
       setSaving(false);
@@ -122,93 +122,95 @@ const AppHeader = () => {
 
   return (
     <>
-      <header className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex-1">
-          <h1 className="text-3xl font-black text-indigo-900 flex items-center gap-2">
-            <Calculator className="text-indigo-600" />
-            Simulador Crédito
-          </h1>
-          <p className="text-slate-500">Optimización de deuda y gestión patrimonial</p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="flex bg-white p-1 rounded-xl shadow-sm border border-slate-200 overflow-x-auto no-scrollbar">
-            {TABS.map(({ key, label }) => (
-              <button
-                key={key}
-                onClick={() => setActiveTab(key)}
-                className={`px-6 py-2 rounded-lg text-sm font-bold transition-all whitespace-nowrap ${
-                  activeTab === key ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+      <header className="mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200">
+          <div className="flex-shrink-0">
+            <h1 className="text-2xl md:text-3xl font-black text-indigo-900 flex items-center gap-2">
+              <Calculator className="text-indigo-600" size={28} />
+              Amortízate
+            </h1>
+            <p className="text-slate-500 text-xs md:text-sm">Optimización de deuda y gestión patrimonial</p>
           </div>
 
-          {status === "loading" && (
-            <div className="h-10 w-10 rounded-full bg-slate-200 animate-pulse" />
-          )}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {status === "loading" && (
+              <div className="h-10 w-10 rounded-full bg-slate-200 animate-pulse" />
+            )}
 
-          {status === "authenticated" && session?.user && (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setShowSaveModal(true)}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-bold shadow-sm transition-all"
-              >
-                <Save size={16} />
-                Guardar Escenario
-              </button>
+            {status === "authenticated" && session?.user && (
+              <>
+                <button
+                  onClick={() => setShowSaveModal(true)}
+                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs md:text-sm font-bold shadow-sm transition-all"
+                >
+                  <Save size={16} />
+                  <span className="hidden sm:inline">Guardar Escenario</span>
+                </button>
 
-              {saveSuccess && (
-                <span className="text-sm font-bold text-emerald-600 animate-pulse">
-                  Guardado
-                </span>
-              )}
+                {saveSuccess && (
+                  <span className="text-xs font-bold text-emerald-600 animate-pulse">
+                    Guardado
+                  </span>
+                )}
 
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold shadow-sm transition-all"
-              >
-                <FolderOpen size={16} />
-                Mis Escenarios
-              </Link>
+                <Link
+                  href="/dashboard"
+                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs md:text-sm font-bold shadow-sm transition-all"
+                >
+                  <FolderOpen size={16} />
+                  <span className="hidden sm:inline">Mis Escenarios</span>
+                </Link>
 
-              <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-slate-200 text-sm">
-                <User size={14} className="text-slate-400" />
-                <span className="text-slate-700 font-medium truncate max-w-[120px]">
-                  {session.user.name || session.user.email}
-                </span>
-              </div>
+                <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-slate-200 text-sm">
+                  <User size={14} className="text-slate-400" />
+                  <span className="text-slate-700 font-medium truncate max-w-[120px]">
+                    {session.user.name || session.user.email}
+                  </span>
+                </div>
 
-              <button
-                onClick={() => signOut({ callbackUrl: "/" })}
-                className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all"
-                title="Cerrar Sesión"
-              >
-                <LogOut size={18} />
-              </button>
-            </div>
-          )}
+                <button
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all"
+                  title="Cerrar Sesión"
+                >
+                  <LogOut size={18} />
+                </button>
+              </>
+            )}
 
-          {status === "unauthenticated" && (
-            <div className="flex items-center gap-2">
-              <Link
-                href="/auth/login"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-sm font-bold shadow-sm transition-all"
-              >
-                <LogIn size={16} />
-                Iniciar Sesión
-              </Link>
-              <Link
-                href="/auth/register"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold shadow-sm transition-all"
-              >
-                <UserPlus size={16} />
-                Registrarse
-              </Link>
-            </div>
-          )}
+            {status === "unauthenticated" && (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="inline-flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs md:text-sm font-bold shadow-sm transition-all"
+                >
+                  <LogIn size={16} />
+                  <span className="hidden sm:inline">Iniciar Sesión</span>
+                </Link>
+                <Link
+                  href="/auth/register"
+                  className="inline-flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs md:text-sm font-bold shadow-sm transition-all"
+                >
+                  <UserPlus size={16} />
+                  <span className="hidden sm:inline">Registrarse</span>
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-3 flex bg-white p-1 rounded-xl shadow-sm border border-slate-200 overflow-x-auto no-scrollbar">
+          {TABS.map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => setActiveTab(key)}
+              className={`px-4 md:px-6 py-2 rounded-lg text-xs md:text-sm font-bold transition-all whitespace-nowrap ${
+                activeTab === key ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </header>
 

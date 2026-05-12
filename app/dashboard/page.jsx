@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
 import { Plus, FolderOpen } from "lucide-react";
 import Link from "next/link";
 import ScenarioCard from "../../components/dashboard/ScenarioCard";
 
 export default function DashboardPage() {
-  const { data: session } = useSession();
   const [scenarios, setScenarios] = useState([]);
   const [loading, setLoading] = useState(true);
 

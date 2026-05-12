@@ -18,7 +18,7 @@
     "bcryptjs": "^3.0.3",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.7",
-    "lucide-react": "^1.7.0",
+    "lucide-react": "^1.14.0",
     "next": "14.2.29",
     "next-auth": "^4.24.14",
     "react": "^18.2.0",
@@ -30,10 +30,10 @@
     "@types/node": "20",
     "@types/react": "18",
     "@types/react-dom": "18",
-    "autoprefixer": "^10.4.27",
+    "autoprefixer": "^10.5.0",
     "eslint": "8",
     "eslint-config-next": "14.2.29",
-    "postcss": "^8.5.8",
+    "postcss": "^8.5.14",
     "prisma": "^6.19.3",
     "tailwindcss": "3"
   }

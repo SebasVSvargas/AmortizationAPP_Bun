@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Edit, Trash2, Play } from "lucide-react";
 import Link from "next/link";
@@ -15,7 +14,6 @@ const METHOD_NAMES = {
 };
 
 export default function ScenarioPage() {
-  const { data: session } = useSession();
   const router = useRouter();
   const params = useParams();
   const [scenario, setScenario] = useState(null);
@@ -24,7 +22,7 @@ export default function ScenarioPage() {
 
   useEffect(() => {
     fetchScenario();
-  }, [params.id]);
+  }, [params.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchScenario = async () => {
     try {
