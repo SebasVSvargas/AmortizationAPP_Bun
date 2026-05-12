@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TrendingUp } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useLoanContext } from '../../lib/context/LoanContext';
@@ -7,12 +7,26 @@ import { formatCurrency } from '../../lib/utils/formatters';
 import { CHART_COLORS, AXIS_STYLE, TOOLTIP_STYLE_LARGE, currencyTickFormatter } from '../../lib/constants/chartConfig';
 
 const StrategyTab = () => {
-  const { totalCapacity, setTotalCapacity, investmentROI, setInvestmentROI } = useLoanContext();
-  const { strategyAnalysis } = useCalculations();
+  const {
+    totalCapacity, setTotalCapacity,
+    investmentROI, setInvestmentROI,
+    useCustomInstallment, customInstallmentValue,
+  } = useLoanContext();
+  const { baseline, strategyAnalysis } = useCalculations();
+
+  useEffect(() => {
+    if (useCustomInstallment && customInstallmentValue > 0) {
+      setTotalCapacity(customInstallmentValue);
+    } else {
+      setTotalCapacity(0);
+    }
+  }, [useCustomInstallment, customInstallmentValue, setTotalCapacity]);
+
+  const excedente = Math.max(0, totalCapacity - baseline.monthlyPmt);
 
   return (
     <div className="space-y-8 animate-in slide-in-from-bottom-8 duration-700">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 bg-white p-8 rounded-3xl shadow-xl border border-slate-200">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-6 bg-white p-8 rounded-3xl shadow-xl border border-slate-200">
         <div className="md:col-span-2">
           <h2 className="text-2xl font-black text-indigo-900 mb-2 flex items-center gap-2">
             <TrendingUp className="w-6 h-6 text-emerald-500" /> Pagar Deuda vs. Invertir Excedente
@@ -27,6 +41,18 @@ const StrategyTab = () => {
             onChange={(event) => setTotalCapacity(Number(event.target.value))}
             className="w-full p-3 bg-slate-50 border rounded-xl font-black text-indigo-600 outline-none focus:ring-2 focus:ring-indigo-500"
           />
+        </div>
+        <div className="space-y-1">
+          <label className="text-[10px] font-black uppercase text-slate-400">Cuota Banco Mínima</label>
+          <div className="w-full p-3 bg-slate-50 border rounded-xl font-black text-slate-600">
+            {formatCurrency(baseline.monthlyPmt)}
+          </div>
+        </div>
+        <div className="space-y-1">
+          <label className="text-[10px] font-black uppercase text-slate-400">Excedente</label>
+          <div className="w-full p-3 bg-slate-50 border rounded-xl font-black text-emerald-600">
+            {formatCurrency(excedente)}
+          </div>
         </div>
         <div className="space-y-1">
           <label className="text-[10px] font-black uppercase text-slate-400">Rentabilidad (% Anual)</label>
@@ -83,8 +109,8 @@ const StrategyTab = () => {
               <YAxis {...AXIS_STYLE} tickFormatter={currencyTickFormatter} />
               <Tooltip formatter={(value) => formatCurrency(value)} contentStyle={TOOLTIP_STYLE_LARGE} />
               <Legend verticalAlign="top" height={36} />
-              <Line type="monotone" dataKey="patrimonioA" stroke={CHART_COLORS.INDIGO_LIGHT} strokeWidth={4} dot={false} name="Invertir desde el Mes 1" />
-              <Line type="monotone" dataKey="patrimonioB" stroke={CHART_COLORS.EMERALD} strokeWidth={4} dot={false} name="Liquidar Deuda e Invertir" />
+              <Line type="monotone" dataKey="patrimonioA" stroke={CHART_COLORS.INDIGO_LIGHT} strokeWidth={4} dot={false} name="Invertir desde el Mes 1 el excedente" />
+              <Line type="monotone" dataKey="patrimonioB" stroke={CHART_COLORS.EMERALD} strokeWidth={4} dot={false} name="Liquidar Deuda e Invertir después" />
             </LineChart>
           </ResponsiveContainer>
         </div>
