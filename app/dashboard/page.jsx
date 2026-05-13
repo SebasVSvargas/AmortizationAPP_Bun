@@ -10,22 +10,22 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchScenarios();
-  }, []);
-
-  const fetchScenarios = async () => {
-    try {
-      const res = await fetch("/api/scenarios");
-      if (res.ok) {
-        const data = await res.json();
-        setScenarios(data);
+    async function loadScenarios() {
+      try {
+        const res = await fetch("/api/scenarios");
+        if (res.ok) {
+          const data = await res.json();
+          setScenarios(data);
+        }
+      } catch (error) {
+        console.error("Error al cargar escenarios:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error al cargar escenarios:", error);
-    } finally {
-      setLoading(false);
     }
-  };
+
+    loadScenarios();
+  }, []);
 
   const handleDelete = async (id) => {
     try {

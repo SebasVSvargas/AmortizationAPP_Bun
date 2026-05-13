@@ -71,23 +71,29 @@ const AppContent = () => {
 function HomeContent() {
   const searchParams = useSearchParams();
   const [scenarioData, setScenarioData] = useState(null);
-  const [loadingScenario, setLoadingScenario] = useState(false);
+  const [resolvedScenarioId, setResolvedScenarioId] = useState(null);
 
   const scenarioId = searchParams.get("scenarioId");
+  const activeScenarioData = scenarioId === resolvedScenarioId ? scenarioData : null;
+  const loadingScenario = Boolean(scenarioId && scenarioId !== resolvedScenarioId);
 
   useEffect(() => {
     if (!scenarioId) {
-      setScenarioData(null);
       return;
     }
 
-    setLoadingScenario(true);
+    let isCancelled = false;
+
     fetch(`/api/scenarios/${scenarioId}`)
       .then((res) => {
         if (!res.ok) throw new Error("No encontrado");
         return res.json();
       })
       .then((data) => {
+        if (isCancelled) {
+          return;
+        }
+
         setScenarioData({
           loanAmount: data.loanAmount,
           interestRate: data.interestRate,
@@ -96,17 +102,24 @@ function HomeContent() {
           customInstallment: data.customInstallment || 0,
           extraPayments: data.extraPayments || [],
         });
+        setResolvedScenarioId(scenarioId);
       })
       .catch(() => {
+        if (isCancelled) {
+          return;
+        }
+
         setScenarioData(null);
-      })
-      .finally(() => {
-        setLoadingScenario(false);
+        setResolvedScenarioId(scenarioId);
       });
+
+    return () => {
+      isCancelled = true;
+    };
   }, [scenarioId]);
 
   const initialData = useMemo(() => {
-    if (scenarioData) return scenarioData;
+    if (activeScenarioData) return activeScenarioData;
 
     const amount = searchParams.get("amount");
     const rate = searchParams.get("rate");
@@ -123,7 +136,7 @@ function HomeContent() {
     }
 
     return null;
-  }, [scenarioData, searchParams]);
+  }, [activeScenarioData, searchParams]);
 
   if (loadingScenario) {
     return (

@@ -21,25 +21,25 @@ export default function ScenarioPage() {
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    fetchScenario();
-  }, [params.id]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const fetchScenario = async () => {
-    try {
-      const res = await fetch(`/api/scenarios/${params.id}`);
-      if (res.ok) {
-        const data = await res.json();
-        setScenario(data);
-      } else {
+    async function loadScenario() {
+      try {
+        const res = await fetch(`/api/scenarios/${params.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          setScenario(data);
+        } else {
+          router.push("/dashboard");
+        }
+      } catch (error) {
+        console.error("Error al cargar escenario:", error);
         router.push("/dashboard");
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error al cargar escenario:", error);
-      router.push("/dashboard");
-    } finally {
-      setLoading(false);
     }
-  };
+
+    loadScenario();
+  }, [params.id, router]);
 
   const handleDelete = async () => {
     if (confirm("¿Estás seguro de eliminar este escenario?")) {
