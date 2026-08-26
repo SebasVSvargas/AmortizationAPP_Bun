@@ -2,16 +2,18 @@ import React, { createContext, useContext } from 'react';
 import { useBaselineAmortization } from '../../hooks/useBaselineAmortization';
 import { useOptimizedAmortization } from '../../hooks/useOptimizedAmortization';
 import { useInvestmentStrategy } from '../../hooks/useInvestmentStrategy';
+import { useInternalDebt } from '../../hooks/useInternalDebt';
 
 const CalculationsContext = createContext(null);
 
 export const CalculationsProvider = ({ children }) => {
   const baseline = useBaselineAmortization();
-  const optimized = useOptimizedAmortization(baseline);
+  const internalDebt = useInternalDebt();
+  const optimized = useOptimizedAmortization(baseline, internalDebt);
   const strategyAnalysis = useInvestmentStrategy(baseline.monthlyPmt);
 
   return (
-    <CalculationsContext.Provider value={{ baseline, ...optimized, strategyAnalysis }}>
+    <CalculationsContext.Provider value={{ baseline, ...optimized, strategyAnalysis, internalDebt }}>
       {children}
     </CalculationsContext.Provider>
   );

@@ -29,6 +29,7 @@ model Scenario {
   method            String   @default("french")
   customInstallment Float?
   extraPayments     Json     @default("[]")
+  internalDebt      Json     @default("{}")
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 

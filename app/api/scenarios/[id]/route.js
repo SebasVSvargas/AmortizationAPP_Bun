@@ -68,7 +68,7 @@ export async function PUT(request, { params }) {
     }
 
     const body = await request.json();
-    const { name, loanAmount, interestRate, termMonths, method, customInstallment, extraPayments } = body;
+    const { name, loanAmount, interestRate, termMonths, method, customInstallment, extraPayments, internalDebt } = body;
 
     const scenario = await prisma.scenario.update({
       where: { id },
@@ -79,7 +79,8 @@ export async function PUT(request, { params }) {
         termMonths: parseInt(termMonths),
         method,
         customInstallment: customInstallment ? parseFloat(customInstallment) : null,
-        extraPayments: extraPayments || [],
+        extraPayments: extraPayments !== undefined ? extraPayments : existingScenario.extraPayments,
+        internalDebt: internalDebt !== undefined ? internalDebt : existingScenario.internalDebt,
       },
     });
 

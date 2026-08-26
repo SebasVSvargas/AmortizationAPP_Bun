@@ -1,17 +1,35 @@
 import React from 'react';
 import { X } from 'lucide-react';
 import { useUIContext } from '../../lib/context/UIContext';
+import { useLoanContext } from '../../lib/context/LoanContext';
 import ConfigPanel from '../panels/ConfigPanel';
 import ExtraPaymentsPanel from '../panels/ExtraPaymentsPanel';
 import CustomInstallmentPanel from '../panels/CustomInstallmentPanel';
+import Card from '../ui/Card';
 
-const PanelContent = () => (
-  <>
-    <ConfigPanel />
-    <ExtraPaymentsPanel />
-    <CustomInstallmentPanel />
-  </>
-);
+const PanelContent = () => {
+  const { internalDebtEnabled } = useLoanContext();
+
+  return (
+    <>
+      <ConfigPanel />
+      {internalDebtEnabled ? (
+        <Card>
+          <h3 className="text-xs font-black uppercase tracking-widest mb-2 text-orange-600">
+            Abonos puntuales
+          </h3>
+          <p className="text-sm text-slate-500 leading-relaxed">
+            Con deuda interna activa, los abonos al banco se registran en la pestaña
+            {' '}<span className="font-bold text-slate-700">Deuda interna</span>, mes a mes por participante.
+          </p>
+        </Card>
+      ) : (
+        <ExtraPaymentsPanel />
+      )}
+      <CustomInstallmentPanel />
+    </>
+  );
+};
 
 const SidePanel = ({ alwaysVisible = false }) => {
   const { drawerOpen, setDrawerOpen } = useUIContext();

@@ -41,7 +41,7 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const { name, loanAmount, interestRate, termMonths, method, customInstallment, extraPayments } = body;
+    const { name, loanAmount, interestRate, termMonths, method, customInstallment, extraPayments, internalDebt } = body;
 
     if (!name || !loanAmount || !interestRate || !termMonths) {
       return NextResponse.json(
@@ -60,6 +60,7 @@ export async function POST(request) {
         method: method || "french",
         customInstallment: customInstallment ? parseFloat(customInstallment) : null,
         extraPayments: extraPayments || [],
+        internalDebt: internalDebt || {},
       },
     });
 

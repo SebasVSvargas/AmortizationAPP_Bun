@@ -2,13 +2,23 @@ import { useMemo } from 'react';
 import { useLoanContext } from '../lib/context/LoanContext';
 import { AMORTIZATION_METHODS, CALCULATION } from '../lib/constants';
 
-export const useOptimizedAmortization = (baseline) => {
+export const useOptimizedAmortization = (baseline, internalDebt) => {
   const {
     loanAmount, interestRate, termMonths, method,
     extraPayments, useCustomInstallment, customInstallmentValue,
   } = useLoanContext();
 
   const amortization = useMemo(() => {
+    if (internalDebt?.enabled && Array.isArray(internalDebt.bankSchedule) && internalDebt.bankSchedule.length > 0) {
+      const schedule = internalDebt.bankSchedule;
+      const totalInterest = schedule.reduce((sum, row) => sum + (row.interest || 0), 0);
+      return {
+        schedule,
+        totalInterest,
+        totalCost: loanAmount + totalInterest,
+        duration: schedule.length,
+      };
+    }
     const schedule = [];
     let balance = loanAmount;
     const monthlyRate = (interestRate / 100) / 12;
@@ -65,7 +75,7 @@ export const useOptimizedAmortization = (baseline) => {
       totalCost: loanAmount + totalInterest,
       duration: schedule.length,
     };
-  }, [loanAmount, interestRate, termMonths, extraPayments, useCustomInstallment, customInstallmentValue, method]);
+  }, [loanAmount, interestRate, termMonths, extraPayments, useCustomInstallment, customInstallmentValue, method, internalDebt?.enabled, internalDebt?.bankSchedule]);
 
   const { schedule: optSchedule, totalInterest: optInterest, totalCost: optCost, duration: optDuration } = amortization;
 

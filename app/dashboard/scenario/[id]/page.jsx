@@ -201,6 +201,15 @@ export default function ScenarioPage() {
             </div>
 
             <div className="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
+              <span className="text-sm text-slate-500">Deuda interna</span>
+              <span className="font-black text-slate-800">
+                {scenario.internalDebt?.enabled
+                  ? `${scenario.internalDebt.participants?.length || 0} participantes`
+                  : "No configurada"}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
               <span className="text-sm text-slate-500">Creado</span>
               <span className="font-black text-slate-800">
                 {new Date(scenario.createdAt).toLocaleDateString("es-CO")}

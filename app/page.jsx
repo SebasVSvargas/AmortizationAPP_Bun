@@ -4,6 +4,7 @@ import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal } from "lucide-react";
 import { useUIContext } from "../lib/context/UIContext";
+import { useLoanContext } from "../lib/context/LoanContext";
 import AppHeader from "../components/layout/AppHeader";
 import SidePanel from "../components/layout/SidePanel";
 import Footer from "../components/layout/Footer";
@@ -11,12 +12,14 @@ import SummaryTab from "../components/tabs/SummaryTab";
 import StrategyTab from "../components/tabs/StrategyTab";
 import TableTab from "../components/tabs/TableTab";
 import ChartsTab from "../components/tabs/ChartsTab";
+import InternalDebtTab from "../components/tabs/InternalDebtTab";
 import { LoanProvider } from "../lib/context/LoanContext";
 import { UIProvider } from "../lib/context/UIContext";
 import { CalculationsProvider } from "../lib/context/CalculationsContext";
 
 const AppContent = () => {
   const { activeTab, drawerOpen, setDrawerOpen } = useUIContext();
+  const { scenarioName } = useLoanContext();
 
   useEffect(() => {
     setDrawerOpen(false);
@@ -27,33 +30,42 @@ const AppContent = () => {
       <div className="max-w-7xl mx-auto">
         <AppHeader />
 
+        {scenarioName && (
+          <h2 className="text-2xl font-bold text-slate-600 mb-2">
+            {scenarioName}
+          </h2>
+        )}
+
         <div
           className={`grid gap-8 ${
-            activeTab === "strategy"
+            activeTab === "strategy" || activeTab === "internalDebt"
               ? "grid-cols-1"
               : "grid-cols-1 lg:grid-cols-12"
           }`}
         >
-          {activeTab !== "strategy" && (
+          {activeTab !== "strategy" && activeTab !== "internalDebt" && (
             <SidePanel alwaysVisible={activeTab === "summary"} />
           )}
 
           <main
             className={
-              activeTab === "strategy" ? "col-span-full" : "lg:col-span-8"
+              activeTab === "strategy" || activeTab === "internalDebt"
+                ? "col-span-full"
+                : "lg:col-span-8"
             }
           >
             {activeTab === "summary" && <SummaryTab />}
             {activeTab === "strategy" && <StrategyTab />}
             {activeTab === "table" && <TableTab />}
             {activeTab === "charts" && <ChartsTab />}
+            {activeTab === "internalDebt" && <InternalDebtTab />}
           </main>
         </div>
 
         <Footer />
       </div>
 
-      {activeTab !== "strategy" && activeTab !== "summary" && (
+      {activeTab !== "strategy" && activeTab !== "internalDebt" && activeTab !== "summary" && (
         <button
           onClick={() => setDrawerOpen(true)}
           className={`fixed bottom-6 right-6 z-20 lg:hidden inline-flex items-center gap-2 px-5 py-3 rounded-full bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white text-sm font-bold shadow-xl transition-all ${
@@ -95,12 +107,14 @@ function HomeContent() {
         }
 
         setScenarioData({
+          name: data.name,
           loanAmount: data.loanAmount,
           interestRate: data.interestRate,
           termMonths: data.termMonths,
           method: data.method,
           customInstallment: data.customInstallment || 0,
           extraPayments: data.extraPayments || [],
+          internalDebt: data.internalDebt || {},
         });
         setResolvedScenarioId(scenarioId);
       })

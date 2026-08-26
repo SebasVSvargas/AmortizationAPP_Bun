@@ -34,6 +34,7 @@ const SaveModal = ({ isOpen, onClose, loanData }) => {
           method: loanData.method,
           customInstallment: loanData.useCustomInstallment ? loanData.customInstallmentValue : 0,
           extraPayments: loanData.extraPayments || [],
+          internalDebt: loanData.getInternalDebtPayload?.() || {},
         }),
       });
 
@@ -122,7 +123,7 @@ const AppHeader = () => {
 
   return (
     <>
-      <header className="mb-8">
+      <header className="mb-2">
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200">
           <div className="flex-shrink-0">
             <h1 className="text-2xl md:text-3xl font-black text-indigo-900 flex items-center gap-2">
@@ -199,7 +200,7 @@ const AppHeader = () => {
           </div>
         </div>
 
-        <div className="mt-3 flex bg-white p-1 rounded-xl shadow-sm border border-slate-200 overflow-x-auto no-scrollbar">
+        <div className="mt-2 flex bg-white p-1 rounded-xl shadow-sm border border-slate-200 overflow-x-auto no-scrollbar">
           {TABS.map(({ key, label }) => (
             <button
               key={key}
